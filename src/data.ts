@@ -10,7 +10,7 @@ export const weddingData: WeddingData = {
   },
   bride: {
     name: "유선주",
-    englishName: "you sun ju",
+    englishName: "sun ju",
     phone: "010-9876-5432",
     father: "유영식",
     mother: "박복임"
