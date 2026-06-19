@@ -1,0 +1,6 @@
+{
+  "name": "모바일 청첩장",
+  "description": "세련되고 클래식한 에디토리얼 감성의 모바일 청첩장 웹페이지입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
