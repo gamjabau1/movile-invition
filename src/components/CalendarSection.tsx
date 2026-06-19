@@ -164,7 +164,7 @@ export default function CalendarSection() {
           <div className="bg-white border border-line px-6 py-4 rounded-2xl">
             <p className="font-kr-title text-stone-700 font-medium text-sm leading-relaxed">
               🎉 두 사람의 새로운 여정이 시작되었습니다. 🎉<br />
-              많은 예쁜 축복에 가슴 깊이 감사드립니다.
+              많은 축복에 가슴 깊이 감사드립니다.
             </p>
           </div>
         )}
