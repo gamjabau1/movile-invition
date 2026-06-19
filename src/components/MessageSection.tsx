@@ -3,23 +3,26 @@ import { MessageSquare, Trash2, Heart, ShieldCheck, Lock, Send, X, Loader2, Phon
 import { GuestMessage } from "../types";
 import { weddingData } from "../data";
 
+// 하객이 축하 메시지를 남기고, 비밀번호로 삭제할 수 있는 방명록 섹션입니다.
 export default function MessageSection() {
+  // 서버에서 가져온 메시지 목록과 요청 상태를 관리합니다.
   const [messages, setMessages] = useState<GuestMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  // 새 메시지 작성 폼의 입력값입니다.
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [password, setPassword] = useState("");
 
-  // Deleting State
+  // 삭제 확인 모달에서 사용하는 상태입니다.
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deletePass, setDeletePass] = useState("");
   const [deleteError, setDeleteError] = useState("");
   const [deleting, setDeleting] = useState(false);
 
-  // Load Messages
+  // 서버 API에서 방명록 메시지 목록을 불러옵니다.
   const fetchMessages = async () => {
     setLoading(true);
     try {
@@ -42,7 +45,7 @@ export default function MessageSection() {
     fetchMessages();
   }, []);
 
-  // Post Message
+  // 작성 폼을 서버로 보내고 성공하면 목록 맨 앞에 추가합니다.
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !content.trim()) return;
@@ -79,7 +82,7 @@ export default function MessageSection() {
     }
   };
 
-  // Delete Action submit
+  // 삭제 비밀번호를 서버로 보내 해당 메시지 삭제를 요청합니다.
   const handleDeleteSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!deletingId) return;
@@ -110,7 +113,7 @@ export default function MessageSection() {
     }
   };
 
-  // Format date readable
+  // ISO 날짜 문자열을 방명록에 어울리는 짧은 날짜 형식으로 바꿉니다.
   const formatDate = (isoStr: string) => {
     try {
       const date = new Date(isoStr);
@@ -127,7 +130,7 @@ export default function MessageSection() {
 
   return (
     <section id="message-section" className="bg-white px-6 py-16 flex flex-col items-center relative">
-      {/* Editorial Header */}
+      {/* 방명록 섹션 제목입니다. */}
       <div className="text-center mb-8">
         <span className="font-en-title text-4xl text-taupe block mb-1 select-none tracking-wide">
           Guest Book
@@ -143,7 +146,7 @@ export default function MessageSection() {
         남겨주신 축복 가득한 한마디 한마디 깊이 감사히 읽겠습니다.
       </p>
 
-      {/* Input Message Form */}
+      {/* 축하 메시지를 입력하는 폼입니다. */}
       <div className="w-full max-w-md bg-cream border border-line p-6 rounded-2xl shadow-xs transition-all duration-300 mb-10 font-kr-body">
         <h3 className="font-kr-title text-sm font-semibold tracking-wider text-stone-700 mb-4 flex items-center gap-1.5 justify-center">
           <Heart className="w-4 h-4 text-taupe fill-taupe animate-pulse" />
@@ -223,7 +226,7 @@ export default function MessageSection() {
         )}
       </div>
 
-      {/* Guest Feed / wishing list */}
+      {/* 등록된 축하 메시지를 최신순으로 보여주는 목록입니다. */}
       <div className="w-full max-w-md space-y-4">
         <div className="flex items-center justify-between border-b border-line pb-3 mb-6">
           <span className="text-xs font-kr-title font-bold text-stone-700 flex items-center gap-2">
@@ -258,7 +261,7 @@ export default function MessageSection() {
                 key={msg.id}
                 className="bg-cream hover:bg-[#faf6f1] border border-line p-5 rounded-2xl relative shadow-xs transition-all duration-300 group"
               >
-                {/* Header card info */}
+                {/* 작성자 이름과 등록 시간을 표시합니다. */}
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-kr-title font-semibold text-ink">
@@ -268,7 +271,7 @@ export default function MessageSection() {
                       {formatDate(msg.createdAt)}
                     </span>
                   </div>
-                  {/* Delete button (only show on interaction or for touch compatibility) */}
+                  {/* 삭제 버튼을 누르면 비밀번호 확인 모달이 열립니다. */}
                   <button
                     onClick={() => {
                       setDeletingId(msg.id);
@@ -282,7 +285,7 @@ export default function MessageSection() {
                   </button>
                 </div>
 
-                {/* Content body with line breaks */}
+                {/* 줄바꿈을 유지해 메시지 본문을 표시합니다. */}
                 <p className="text-xs font-kr-body text-stone-600 leading-relaxed whitespace-pre-line text-left">
                   {msg.content}
                 </p>
@@ -292,13 +295,13 @@ export default function MessageSection() {
         )}
       </div>
 
-      {/* Dynamic Couple Contact Section with calling & messaging */}
+      {/* 신랑/신부에게 바로 전화 또는 문자를 보낼 수 있는 연락 버튼입니다. */}
       <div className="w-full max-w-md mt-12 pt-8 border-t border-line text-center">
         <h3 className="font-kr-title text-sm font-semibold tracking-wider text-stone-700 mb-4">
           신랑 & 신부에게 축하 인사 전하기
         </h3>
         <div className="grid grid-cols-2 gap-4">
-          {/* Groom Contact Button card */}
+          {/* 신랑 연락 카드입니다. */}
           <div className="bg-cream/40 border border-line p-5 rounded-2xl flex flex-col items-center justify-between">
             <div className="text-center mb-3">
               <span className="text-[10px] font-en-body bg-blue-50 text-blue-600 font-medium px-2 py-0.5 rounded-full inline-block mb-1"> Groom </span>
@@ -324,7 +327,7 @@ export default function MessageSection() {
             </div>
           </div>
 
-          {/* Bride Contact Button card */}
+          {/* 신부 연락 카드입니다. */}
           <div className="bg-cream/40 border border-line p-5 rounded-2xl flex flex-col items-center justify-between">
             <div className="text-center mb-3">
               <span className="text-[10px] font-en-body bg-pink-50 text-pink-600 font-medium px-2 py-0.5 rounded-full inline-block mb-1"> Bride </span>
@@ -352,7 +355,7 @@ export default function MessageSection() {
         </div>
       </div>
 
-      {/* Mini Delete Overlay Prompt Inside Module */}
+      {/* 삭제 비밀번호를 입력받는 확인 모달입니다. */}
       {deletingId && (
         <div className="fixed inset-0 bg-stone-950/80 backdrop-blur-xs z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-xs p-6 shadow-2xl border border-line animate-scale-up font-kr-body">

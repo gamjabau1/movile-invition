@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Copy, MapPin, Navigation, Car, Train, Bus } from "lucide-react";
 import { weddingData } from "../data";
 
+// 예식장 위치, 지도, 주소 복사, 길찾기 버튼을 담당하는 섹션입니다.
 export default function MapSection() {
   const [copied, setCopied] = useState(false);
 
+  // 예식장 주소를 클립보드에 복사하고 잠시 완료 상태를 보여줍니다.
   const copyAddress = async () => {
     try {
       await navigator.clipboard.writeText(weddingData.address);
@@ -16,20 +18,20 @@ export default function MapSection() {
   };
 
   const navNaver = () => {
-    // Open Naver Map search link for the address
+    // 네이버 지도에서 예식장 이름을 검색한 결과 페이지를 엽니다.
     const url = `https://map.naver.com/v5/search/${encodeURIComponent(weddingData.venueName)}`;
     window.open(url, "_blank");
   };
 
   const navKakao = () => {
-    // Open Kakao Map search link for the address
+    // 카카오맵에서 예식장 이름을 검색한 결과 페이지를 엽니다.
     const url = `https://map.kakao.com/?q=${encodeURIComponent(weddingData.venueName)}`;
     window.open(url, "_blank");
   };
 
   return (
     <section id="map-section" className="bg-white px-6 py-16 flex flex-col items-center">
-      {/* Editorial Header */}
+      {/* 지도 섹션 제목입니다. */}
       <div className="text-center mb-8">
         <span className="font-en-title text-4xl text-taupe block mb-1 select-none tracking-wide">
           Location
@@ -40,7 +42,7 @@ export default function MapSection() {
         <div className="w-8 h-[1px] bg-taupe/40 mx-auto mt-4" />
       </div>
 
-      {/* Venue Detail */}
+      {/* 예식장 이름, 홀, 주소, 전화번호를 보여줍니다. */}
       <div className="text-center mb-6 max-w-md">
         <h3 className="font-kr-title text-lg font-semibold text-ink mb-1">
           {weddingData.venueName}
@@ -54,7 +56,7 @@ export default function MapSection() {
         <p className="text-xs text-stone-400 mt-1 font-en-body">Tel. {weddingData.phone}</p>
       </div>
 
-      {/* Embedded Map Visual/Iframe */}
+      {/* Google Maps iframe으로 예식장 주변 지도를 표시합니다. */}
       <div className="w-full max-w-md h-56 rounded-2xl overflow-hidden border border-line shadow-xs relative mb-6">
         <iframe
           title="Wedding Venue Map"
@@ -72,7 +74,7 @@ export default function MapSection() {
         </div>
       </div>
 
-      {/* Interactive Navigation Control Buttons */}
+      {/* 주소 복사와 외부 지도 앱 이동 버튼입니다. */}
       <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md px-2 mb-10 font-kr-body">
         <button
           onClick={copyAddress}
@@ -99,20 +101,20 @@ export default function MapSection() {
         </div>
       </div>
 
-      {/* Custom Toast Notification inside SPA */}
+      {/* 주소 복사가 완료되었음을 알려주는 토스트입니다. */}
       {copied && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-stone-900/90 text-white text-xs px-4 py-2.5 rounded-full shadow-lg z-50 flex items-center gap-2 animate-bounce font-kr-body">
           <span>주소가 클립보드에 복사되었습니다.</span>
         </div>
       )}
 
-      {/* Detailed Public Transport Guides with fine icons */}
+      {/* 대중교통과 주차 정보를 아이콘과 함께 보여줍니다. */}
       <div className="w-full max-w-md bg-cream/40 border border-line p-6 rounded-2xl">
         <h4 className="font-kr-title text-sm font-semibold tracking-wider text-ink mb-5 uppercase flex items-center gap-2">
           <Car className="w-4 h-4 text-taupe" /> 교통수단 안내
         </h4>
 
-        {/* Subway Guide */}
+        {/* 지하철 안내입니다. */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-2">
             <span className="p-1 bg-amber-50 rounded-lg text-amber-800">
@@ -129,7 +131,7 @@ export default function MapSection() {
           </ul>
         </div>
 
-        {/* Bus Guide */}
+        {/* 버스 안내가 있을 때만 표시합니다. */}
         {weddingData.transportation.bus && weddingData.transportation.bus.length > 0 && (
           <div className="mb-5">
             <div className="flex items-center gap-2 mb-2">
@@ -148,7 +150,7 @@ export default function MapSection() {
           </div>
         )}
 
-        {/* Parking Guide */}
+        {/* 자가용과 주차 안내입니다. */}
         <div className="border-t border-line pt-4 mt-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="p-1 bg-stone-100 rounded-lg text-stone-700">

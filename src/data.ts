@@ -1,6 +1,10 @@
 import { WeddingData } from "./types";
+import weddingCheersImage from "./assets/images/wedding_cheers_1781833622217.jpg";
+import weddingHandHoldImage from "./assets/images/wedding_hand_hold_1781833609106.jpg";
  
+// 청첩장 전반에서 사용하는 신랑/신부, 예식, 장소, 계좌 정보를 한곳에 모아둡니다.
 export const weddingData: WeddingData = {
+  // 신랑 기본 정보와 연락처입니다.
   groom: {
     name: "방지원",
     englishName: "Ji-won",
@@ -8,6 +12,7 @@ export const weddingData: WeddingData = {
     father: "방봉수",
     mother: "이선숙"
   },
+  // 신부 기본 정보와 연락처입니다.
   bride: {
     name: "유선주",
     englishName: "sun ju",
@@ -15,8 +20,9 @@ export const weddingData: WeddingData = {
     father: "유영식",
     mother: "박복임"
   },
-  dateStr: "2027년 4월 18일 일요일 오후 12시 30분",
-  year: 2027,
+  // 예식 일시와 장소 정보입니다. 캘린더, 지도, 공유 문구에서 함께 사용됩니다.
+  dateStr: "2026년 4월 18일 토요일 오후 12시 30분",
+  year: 2026,
   month: 4,
   day: 18,
   hour: "12:30",
@@ -24,11 +30,13 @@ export const weddingData: WeddingData = {
   venueHall: "2F 단독홀",
   address: "서울특별시 강남구 영동대로 506",
   phone: "02-539-2956",
+  // 화면에 표시할 대표 이미지와 갤러리용 로컬 이미지 경로입니다.
   images: {
     cover: "https://raw.githubusercontent.com/gamjabau1/mobile-invite/9b36323d80294dae246d21260f0ceb82d46c3fd5/HO_00385_%EC%88%98%EC%A0%95.jpg",
-    detail: "/src/assets/images/wedding_hand_hold_1781833609106.jpg",
-    cheers: "/src/assets/images/wedding_cheers_1781833622217.jpg"
+    detail: weddingHandHoldImage,
+    cheers: weddingCheersImage
   },
+  // 오시는 길 섹션에서 보여줄 교통 안내 문구입니다.
   transportation: {
     subway: [
       "2호선 [삼성역] 8번 출구 앞",
@@ -37,6 +45,7 @@ export const weddingData: WeddingData = {
     bus: [],
     parking: "2시간 무료 주차 가능합니다. 주차권은 1층 인포데스크에서 받아주시길 바랍니다."
   },
+  // 하위 호환을 위해 남겨둔 단일 계좌 정보입니다.
   groomAccount: {
     bank: "우리은행",
     number: "1234",
@@ -57,11 +66,13 @@ export const weddingData: WeddingData = {
     number: "5678",
     holder: "유영식"
   },
+  // 실제 화면의 아코디언 목록에서 사용하는 신랑측 계좌 정보입니다.
   groomAccounts: [
     { role: "혼주 방봉수", bank: "신한은행", number: "1234", holder: "방봉수" },
     { role: "혼주 이선숙", bank: "우리은행", number: "1234", holder: "이선숙" },
     { role: "신랑 방지원", bank: "우리은행", number: "1234", holder: "방지원" }
   ],
+  // 실제 화면의 아코디언 목록에서 사용하는 신부측 계좌 정보입니다.
   brideAccounts: [
     { role: "혼주 유영식", bank: "국민은행", number: "5678", holder: "유영식" },
     { role: "혼주 박복임", bank: "카카오뱅크", number: "5678", holder: "박복임" },

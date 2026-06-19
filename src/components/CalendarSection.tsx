@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { weddingData } from "../data";
 
+// 예식 날짜를 달력에 표시하고 남은 시간을 실시간 카운트다운으로 보여줍니다.
 export default function CalendarSection() {
+  // JavaScript Date의 month는 0부터 시작하므로 weddingData.month에서 1을 뺍니다.
   const targetDate = new Date(weddingData.year, weddingData.month - 1, weddingData.day, 12, 30, 0);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -12,6 +14,7 @@ export default function CalendarSection() {
   });
 
   useEffect(() => {
+    // 현재 시각과 예식 시각의 차이를 초 단위로 다시 계산합니다.
     const calculateTime = () => {
       const now = new Date();
       const diff = targetDate.getTime() - now.getTime();
@@ -34,14 +37,14 @@ export default function CalendarSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // Dynamic calendar matrix calculation based on configured weddingData
+  // weddingData에 설정된 연월을 기준으로 달력 배열을 동적으로 만듭니다.
   const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
   
   const firstDayOfMonth = new Date(weddingData.year, weddingData.month - 1, 1);
   const startOffset = firstDayOfMonth.getDay(); // (0 = Sunday, 1 = Monday, etc.)
   const daysInMonth = new Date(weddingData.year, weddingData.month, 0).getDate();
 
-  // Generate calendar grid array
+  // 월 시작 전 빈 칸(null)과 실제 날짜를 합쳐 7열 그리드에 맞춥니다.
   const gridCells: (number | null)[] = [];
   for (let i = 0; i < startOffset; i++) {
     gridCells.push(null);
@@ -52,7 +55,7 @@ export default function CalendarSection() {
 
   return (
     <section id="calendar-section" className="bg-cream px-6 py-16 flex flex-col items-center">
-      {/* Script header */}
+      {/* 캘린더 섹션 제목입니다. */}
       <span className="font-en-title text-4xl text-taupe mb-2 opacity-90 select-none tracking-wide">
         Save the Date
       </span>
@@ -60,9 +63,9 @@ export default function CalendarSection() {
         {weddingData.year} . {String(weddingData.month).padStart(2, "0")} . {String(weddingData.day).padStart(2, "0")}
       </h3>
 
-      {/* Styled Russian/Korean three-col layout from user image but presented as clean Korean month grid */}
+      {/* 예식 날짜가 동그라미로 강조되는 월간 달력입니다. */}
       <div className="w-full max-w-sm bg-white p-6 rounded-2xl shadow-xs border border-line transition-transform duration-300 hover:scale-[1.01]">
-        {/* Days of Week */}
+        {/* 요일 헤더입니다. */}
         <div className="grid grid-cols-7 text-center gap-y-3 mb-2 font-kr-body">
           {weekDays.map((wd, idx) => (
             <span
@@ -76,7 +79,7 @@ export default function CalendarSection() {
           ))}
         </div>
 
-        {/* Days Grid */}
+        {/* 날짜 칸을 순서대로 렌더링합니다. */}
         <div className="grid grid-cols-7 text-center gap-y-3 relative">
           {gridCells.map((day, index) => {
             const isTarget = day === weddingData.day;
@@ -105,7 +108,7 @@ export default function CalendarSection() {
                     </span>
                     {isTarget && (
                       <div className="absolute inset-0 m-auto w-10 h-10 calendar-circle bg-taupe rounded-full flex items-center justify-center -z-10">
-                        {/* Circle for wedding day */}
+                        {/* 예식일을 한눈에 보이게 하는 강조 원입니다. */}
                         <span className="hidden md:block absolute w-12 h-12 border-2 border-dashed border-taupe rounded-full scale-110 pointer-events-none" />
                       </div>
                     )}
@@ -119,7 +122,7 @@ export default function CalendarSection() {
         </div>
       </div>
 
-      {/* Countdown Timer Widget */}
+      {/* 예식일까지 남은 일/시/분/초를 보여주는 카운트다운입니다. */}
       <div className="mt-10 text-center">
         {!timeLeft.isOver ? (
           <div className="flex flex-col items-center">

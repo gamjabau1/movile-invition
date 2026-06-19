@@ -2,6 +2,7 @@ import { useState, MouseEvent } from "react";
 import { X, ChevronLeft, ChevronRight, ZoomIn, Play } from "lucide-react";
 import { weddingData } from "../data";
 
+// 갤러리에 표시할 사진/영상 카드의 메타데이터입니다.
 interface GalleryItem {
   type: "image" | "video";
   src: string;
@@ -11,9 +12,12 @@ interface GalleryItem {
   tag: string;
 }
 
+// 웨딩 사진 썸네일, 식전 영상, 확대 보기 모달을 담당하는 섹션입니다.
 export default function GallerySection() {
+  // null이면 모달이 닫힌 상태이고, 숫자이면 해당 인덱스의 사진을 확대 표시합니다.
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
+  // 갤러리에 노출되는 사진과 문구 목록입니다.
   const galleryItems: GalleryItem[] = [
     {
       type: "image",
@@ -66,20 +70,21 @@ export default function GallerySection() {
     },
     {
       type: "image",
-      src: "/src/assets/images/wedding_hand_hold_1781833609106.jpg",
+      src: weddingData.images.detail,
       tag: "PROMISE OF LOVE",
       title: "사랑의 또 다른 약속",
       subtitle: "서로의 따스함을 건네는 시간"
     },
     {
       type: "image",
-      src: "/src/assets/images/wedding_cheers_1781833622217.jpg",
+      src: weddingData.images.cheers,
       tag: "SPECIAL CELEBRATION",
       title: "축하와 축복의 아름다운 밤",
       subtitle: "세상에서 가장 빛나는 추억을 새기며"
     }
   ];
 
+  // 모달 안에서 이전 사진으로 이동합니다.
   const handlePrev = (e: MouseEvent) => {
     e.stopPropagation();
     if (activeIdx !== null) {
@@ -87,6 +92,7 @@ export default function GallerySection() {
     }
   };
 
+  // 모달 안에서 다음 사진으로 이동합니다.
   const handleNext = (e: MouseEvent) => {
     e.stopPropagation();
     if (activeIdx !== null) {
@@ -96,7 +102,7 @@ export default function GallerySection() {
 
   return (
     <section id="gallery-section" className="bg-white px-6 py-16 flex flex-col items-center">
-      {/* Editorial Header */}
+      {/* 갤러리 섹션 제목입니다. */}
       <div className="text-center mb-10 select-none">
         <span className="font-en-title text-4xl font-normal text-taupe block mb-1 tracking-wider">
           Our Moments
@@ -107,7 +113,7 @@ export default function GallerySection() {
         <div className="w-8 h-[1px] bg-taupe/40 mx-auto mt-4" />
       </div>
 
-      {/* Clean Editorial Thumbnail Card Grid */}
+      {/* 작은 썸네일을 누르면 해당 사진이 라이트박스로 열립니다. */}
       <div className="w-full max-w-sm grid grid-cols-3 gap-2 px-1">
         {galleryItems.map((item, idx) => (
           <div
@@ -123,7 +129,7 @@ export default function GallerySection() {
               className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
             />
 
-            {/* Special Play button overlay for Video type */}
+            {/* 영상 항목일 때만 재생 아이콘 오버레이를 보여줍니다. */}
             {item.type === "video" && (
               <div className="absolute inset-0 bg-black/15 flex items-center justify-center transition-all duration-300 group-hover:bg-black/25">
                 <div className="bg-taupe/90 text-white p-1.5 rounded-full shadow-xs border border-white/25">
@@ -132,7 +138,7 @@ export default function GallerySection() {
               </div>
             )}
 
-            {/* Hover overlay zoom indicator */}
+            {/* 마우스를 올렸을 때 확대 가능함을 알려주는 오버레이입니다. */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
               <div className="bg-white/95 backdrop-blur-xs p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xs">
                 <ZoomIn className="w-3.5 h-3.5 text-ink" />
@@ -142,7 +148,7 @@ export default function GallerySection() {
         ))}
       </div>
 
-      {/* Dedicated Video Space Section (식전 영상 공간) */}
+      {/* 식전 하이라이트 영상을 별도 영역으로 보여줍니다. */}
       <div className="w-full max-w-sm mt-12 pt-10 border-t border-line text-center select-none" id="wedding-video-panel">
         <span className="font-en-title text-3xl text-taupe block mb-1 font-normal tracking-wide">
           Wedding Film
@@ -155,7 +161,7 @@ export default function GallerySection() {
           정성껏 담은 한 편의 따뜻한 영화에 여러분을 초대합니다.
         </p>
 
-        {/* Video Player styled beautifully with absolute elegance */}
+        {/* 모바일 화면 비율에 맞춘 영상 플레이어입니다. */}
         <div className="bg-cream p-3 pb-4 rounded-md border border-line shadow-xs">
           <div className="relative w-full aspect-[16/9] bg-stone-950 overflow-hidden border border-line rounded-xs">
             <video
@@ -173,14 +179,14 @@ export default function GallerySection() {
         </div>
       </div>
 
-      {/* Lightbox Overlay Modal */}
+      {/* 사진을 크게 볼 수 있는 전체 화면 라이트박스입니다. */}
       {activeIdx !== null && (
         <div
           className="fixed inset-0 bg-stone-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-500"
           onClick={() => setActiveIdx(null)}
           id="gallery-lightbox"
         >
-          {/* Close Action */}
+          {/* 라이트박스를 닫는 버튼입니다. */}
           <button
             onClick={() => setActiveIdx(null)}
             className="absolute top-6 right-6 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all z-50 cursor-pointer animate-fade-in"
@@ -189,7 +195,7 @@ export default function GallerySection() {
             <X className="w-6 h-6" />
           </button>
 
-          {/* Navigation controls */}
+          {/* 라이트박스 사진 이동 버튼입니다. */}
           <button
             onClick={handlePrev}
             className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-all z-50 cursor-pointer"
@@ -206,7 +212,7 @@ export default function GallerySection() {
             <ChevronRight className="w-8 h-8" />
           </button>
 
-          {/* Main Content Slider in Lightbox */}
+          {/* 선택된 사진 또는 영상을 크게 표시하는 본문입니다. */}
           <div
             className="w-full max-w-sm max-h-[85vh] flex flex-col justify-center items-center gap-4 focus:outline-none"
             onClick={(e) => e.stopPropagation()}

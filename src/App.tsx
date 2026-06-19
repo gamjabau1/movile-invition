@@ -13,12 +13,14 @@ import AccountSection from "./components/AccountSection";
 import MessageSection from "./components/MessageSection";
 import ShareSection from "./components/ShareSection";
 
+// 모바일 청첩장의 전체 화면 흐름을 조립하는 최상위 컴포넌트입니다.
 export default function App() {
+  // BGM 재생 상태와 혼주 연락처 펼침 여부를 화면 상태로 관리합니다.
   const [isPlaying, setIsPlaying] = useState(false);
   const [showParentsContact, setShowParentsContact] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Auto-observe entry sections for graceful fade-ins
+  // 화면에 들어온 섹션에 페이드인 클래스를 붙여 스크롤 진입 애니메이션을 만듭니다.
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -40,6 +42,7 @@ export default function App() {
     };
   }, []);
 
+  // 모바일 브라우저의 자동재생 제한을 피하기 위해 사용자가 누른 시점에 오디오를 재생합니다.
   const toggleBgm = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -58,7 +61,7 @@ export default function App() {
       */}
       <div className="relative w-full max-w-md bg-cream shadow-2xl min-h-screen sm:min-h-[850px] sm:rounded-3xl overflow-hidden flex flex-col border border-line">
         
-        {/* Hidden Audio Channel for Ambient Wedding Piano BGM */}
+        {/* 배경음악을 재생하기 위한 숨김 오디오 요소입니다. */}
         <audio
           ref={audioRef}
           src="https://raw.githubusercontent.com/gamjabau1/mobile-invite/9b36323d80294dae246d21260f0ceb82d46c3fd5/Elvis%20Costello%20-%20She.mp3"
@@ -66,7 +69,7 @@ export default function App() {
           preload="auto"
         />
 
-        {/* Ambient BGM floating control player */}
+        {/* 화면 우측 상단에 고정되는 BGM 토글 버튼입니다. */}
         <div className="fixed sm:absolute top-5 right-5 z-40">
           <button
             onClick={toggleBgm}
@@ -91,10 +94,10 @@ export default function App() {
         </div>
 
         {/* =======================================================
-            SECTION 1: HERO PORTRAIT / MAIN COVER
+            SECTION 1: 메인 커버 사진과 예식 기본 정보
             ======================================================= */}
         <div className="relative w-full aspect-[9/16] bg-cream overflow-hidden flex flex-col justify-between">
-          {/* Main Cover Photo Background */}
+          {/* 청첩장 첫 화면을 채우는 메인 웨딩 사진입니다. */}
           <div className="absolute inset-0 z-0">
             <img
               src={weddingData.images.cover}
@@ -102,11 +105,11 @@ export default function App() {
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover brightness-[1.02] contrast-[1.01]"
             />
-            {/* Elegant subtle soft white vignetting gradient overlay to blend into the frame */}
+            {/* 사진 위에 밝은 그라데이션을 얹어 텍스트와 자연스럽게 어울리게 합니다. */}
             <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/40" />
           </div>
 
-          {/* Top Label script mimicking first image */}
+          {/* 상단 영문 타이틀 영역입니다. */}
           <div className="relative z-10 pt-16 text-center select-none">
             <p className="font-en-body text-[10px] tracking-[6px] uppercase text-taupe font-semibold mb-2 pl-1">
               Wedding Invitation
@@ -116,7 +119,7 @@ export default function App() {
             </h1>
           </div>
 
-          {/* Bottom Info Floating Card (Editorial Glassmorphism) */}
+          {/* 하단에는 신랑/신부 이름, 날짜, 장소를 카드 형태로 보여줍니다. */}
           <div className="relative z-10 mx-6 mb-8 p-5 bg-white/90 backdrop-blur-md border border-line/80 rounded-2xl text-center text-[#3D3935] shadow-md select-none transition-all duration-300">
             <div className="font-en-title tracking-[3px] text-xs uppercase opacity-90 mb-2 flex items-center justify-center gap-1.5 text-taupe font-semibold">
               <span>{weddingData.groom.englishName}</span>
@@ -140,7 +143,7 @@ export default function App() {
         </div>
 
         {/* =======================================================
-            SECTION 2: WEDDING GREETING (초대의 글)
+            SECTION 2: 초대의 글
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 bg-white px-8 py-20 text-center flex flex-col items-center">
           <div className="mb-8">
@@ -152,7 +155,7 @@ export default function App() {
             </h2>
           </div>
 
-          {/* Heartfelt Poetic Verse */}
+          {/* 방문자에게 보여줄 초대 문구와 인용문입니다. */}
           <div className="font-kr-title text-[14px] text-stone-600 leading-[2.2] text-center max-w-sm mb-1 select-text font-light">
             <p className="font-semibold text-stone-800 text-base mb-1">“인생은 누구나 비슷한 길을 걸어간다.</p>
             <p className="font-semibold text-stone-800 text-base mb-1">결국엔 늙어서 지난 날을 추억하는 것이란다.</p>
@@ -167,28 +170,28 @@ export default function App() {
         </div>
 
         {/* =======================================================
-            SECTION 3: IMAGE GALLERY (with gorgeous Lightbox)
+            SECTION 3: 웨딩 사진 갤러리
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 border-t border-line">
           <GallerySection />
         </div>
 
         {/* =======================================================
-            SECTION 4: CALENDAR / COUNTDOWN
+            SECTION 4: 예식 날짜 캘린더와 카운트다운
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 border-t border-line">
           <CalendarSection />
         </div>
 
         {/* =======================================================
-            SECTION 5: MAPS AND ROAD DIRECTIONS
+            SECTION 5: 예식장 지도와 교통 안내
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 border-t border-line">
           <MapSection />
         </div>
 
         {/* =======================================================
-            SECTION 6: HANDWRITTEN ANNOUNCEMENT / LOGISTIC CARD 
+            SECTION 6: 식사, 교통, 화환 안내
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 bg-cream px-8 py-16 text-center flex flex-col items-center border-t border-line">
           <div className="mb-8">
@@ -237,21 +240,21 @@ export default function App() {
         </div>
 
         {/* =======================================================
-            SECTION 7: ACCORDION GIFTS / ACCOUNTS
+            SECTION 7: 축의금 계좌 안내
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 border-t border-line">
           <AccountSection />
         </div>
 
         {/* =======================================================
-            SECTION 8: DYNAMIC CONGRATULATORY GUESTBOARD
+            SECTION 8: 축하 메시지 방명록
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 border-t border-line">
           <MessageSection />
         </div>
 
         {/* =======================================================
-            SECTION 9: SOCIAL CHANNELS / SHARE COPIERS
+            SECTION 9: 초대장 공유 영역
             ======================================================= */}
         <div className="fade-section transition-all duration-1000 ease-out opacity-0 translate-y-8 border-t border-line">
           <ShareSection />

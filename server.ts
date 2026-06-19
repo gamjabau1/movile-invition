@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
 
+// 서버가 파일에 저장하고 클라이언트에 내려주는 축하 메시지 형태입니다.
 interface GuestMessage {
   id: string;
   name: string;
@@ -15,10 +16,10 @@ const app = express();
 const PORT = 3000;
 const DB_FILE = path.join(process.cwd(), "messages.json");
 
-// JSON parsing middleware
+// 클라이언트가 보내는 JSON 요청 본문을 읽을 수 있게 합니다.
 app.use(express.json());
 
-// Local File Persistence for Guest Messages
+// 로컬 JSON 파일에서 방명록 메시지를 읽어옵니다.
 function loadMessages(): GuestMessage[] {
   try {
     if (fs.existsSync(DB_FILE)) {
@@ -28,7 +29,7 @@ function loadMessages(): GuestMessage[] {
   } catch (error) {
     console.error("Failed to load messages:", error);
   }
-  // Initialize with heartwarming wedding wishes
+  // 처음 실행했을 때 화면이 비어 보이지 않도록 기본 축하 메시지를 제공합니다.
   return [
     {
       id: "1",
@@ -61,13 +62,13 @@ function saveMessages(messages: GuestMessage[]) {
 
 let messages: GuestMessage[] = loadMessages();
 
-// API: Get all guest messages (strip passwords for safety)
+// API: 축하 메시지 목록을 반환하되 삭제 비밀번호는 절대 내려주지 않습니다.
 app.get("/api/messages", (req, res) => {
   const safeMessages = messages.map(({ password, ...rest }) => rest);
   res.json(safeMessages);
 });
 
-// API: Add a guest message
+// API: 새 축하 메시지를 등록하고 파일에 저장합니다.
 app.post("/api/messages", (req, res) => {
   const { name, content, password } = req.body;
   if (!name || !content) {
@@ -85,11 +86,12 @@ app.post("/api/messages", (req, res) => {
   messages.unshift(newMessage);
   saveMessages(messages);
 
+  // 응답에서도 비밀번호를 제거해 브라우저에 노출되지 않게 합니다.
   const { password: _, ...safeMessage } = newMessage;
   res.status(201).json(safeMessage);
 });
 
-// API: Delete a guest message
+// API: 작성 시 설정한 비밀번호를 확인한 뒤 축하 메시지를 삭제합니다.
 app.delete("/api/messages/:id", (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
@@ -113,6 +115,7 @@ app.delete("/api/messages/:id", (req, res) => {
 });
 
 async function startServer() {
+  // 개발 환경에서는 Vite 미들웨어를 붙여 즉시 새로고침되는 프론트엔드를 제공합니다.
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -120,6 +123,7 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
+    // 배포 환경에서는 빌드된 정적 파일과 SPA 라우팅을 Express가 처리합니다.
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {

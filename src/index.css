@@ -1,6 +1,8 @@
+/* 앱 전체에서 사용할 Google Fonts를 불러옵니다. */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Inter:wght@300;400;500;600&family=Alex+Brush&display=swap');
 @import "tailwindcss";
 
+/* Tailwind v4 테마 토큰: 색상과 폰트를 청첩장 톤에 맞춰 정의합니다. */
 @theme {
   --color-cream: #FDFCF9;
   --color-taupe: #A69076;
@@ -15,25 +17,27 @@
   --font-hand: "Alex Brush", cursive;
 }
 
-/* Custom fade effects and smooth styling */
+/* 텍스트 선택 색상을 청첩장 컬러와 어울리게 맞춥니다. */
 ::selection {
   background-color: #E5E1D8;
   color: #3D3935;
 }
 
+/* 바깥 배경은 모바일 카드가 돋보이도록 어둡게 둡니다. */
 body {
   background-color: #1a1a1a;
   color: #3D3935;
   overflow-x: hidden;
 }
 
-/* Red circle marking effect for the calendar */
+/* 캘린더에서 예식일을 표시하는 원형 강조 효과입니다. */
 .calendar-circle {
   border: 2px solid #A69076;
   border-radius: 50% / 50%;
   animation: circle-pulse 2.5s ease-in-out infinite;
 }
 
+/* 예식일 원이 은은하게 숨 쉬듯 커졌다 작아지는 애니메이션입니다. */
 @keyframes circle-pulse {
   0% {
     transform: scale(1);
